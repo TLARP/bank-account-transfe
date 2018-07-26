@@ -1,4 +1,4 @@
-package com.netease.kaola.generic.api;
+package com.netease.kaola.generic.api.model;
 
 import lombok.Data;
 
