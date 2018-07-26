@@ -5,8 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.netease.kaola</groupId>
-    <artifactId>bank-account-transfe-bankb</artifactId>
+    <artifactId>bankb</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
