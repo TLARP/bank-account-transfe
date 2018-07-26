@@ -10,6 +10,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.netease.kaola</groupId>
+            <artifactId>kaola-common</artifactId>
+            <version>1.0.14</version>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.12.6</version>
