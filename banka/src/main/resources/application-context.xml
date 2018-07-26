@@ -17,4 +17,5 @@
     <import resource="classpath*:dubbo-provider.xml"/>
 
     <import resource="mybatis.xml"/>
+    <import resource="spring-converts.xml"/>
 </beans>
