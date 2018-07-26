@@ -7,4 +7,12 @@
     <groupId>com.netease.kaola</groupId>
     <artifactId>generic-api</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.12.6</version>
+        </dependency>
+    </dependencies>
 </project>
