@@ -32,4 +32,7 @@ public class TransactionRecords implements Serializable {
      *  @link com.netease.kaola.generic.api.model.StatusEnum}
      */
     private Integer statas;
+
+    //执行递增还是扣减 0-扣减 1-递增
+    private Integer deductionOrIncrease;
 }

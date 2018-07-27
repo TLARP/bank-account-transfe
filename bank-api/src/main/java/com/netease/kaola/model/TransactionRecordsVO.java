@@ -34,6 +34,6 @@ public class TransactionRecordsVO implements Serializable {
      */
     private Integer statas;
 
-    //执行的是递增还是扣减操作-0-increate 1-deducation
+    //执行的是递增还是扣减操作-0-扣减 1-递增
     private Integer deductionOrIncrease;
 }
