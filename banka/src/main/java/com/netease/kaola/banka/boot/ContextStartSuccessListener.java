@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
  * Created by hzwangqiqing
  * on 2018/7/27.
  */
+@org.springframework.stereotype.Component
 public class ContextStartSuccessListener implements ApplicationListener<ApplicationEvent> {
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {

@@ -14,6 +14,6 @@
     <dubbo:reference interface="com.netease.kaola.compose.TccComposeApi" id="tccComposeApiBankbImpl" group="bankb"
                      url="127.0.0.1:10001" check="false"/>
 
-    <dubbo:reference interface="com.netease.kaola.compose.TccComposeApi" id="orderComposeApiImpl" group="bankb"
+    <dubbo:reference interface="com.netease.kaola.compose.OrderComposeApi" id="orderComposeApiImpl" group="bankb"
                      url="127.0.0.1:10001" check="false"/>
 </beans>

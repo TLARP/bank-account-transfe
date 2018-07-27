@@ -3,6 +3,7 @@ package com.netease.kaola.bankb.boot;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,6 +12,7 @@ import java.awt.image.BufferedImage;
  * Created by hzwangqiqing
  * on 2018/7/27.
  */
+@org.springframework.stereotype.Component
 public class ContextStartSuccessListener implements ApplicationListener<ApplicationEvent> {
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {

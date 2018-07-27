@@ -25,7 +25,7 @@ import java.util.Map;
 @RequestMapping("/transfer")
 @Controller
 public class AccountController {
-    @Resource(name = "tccComposeApiBankbImpl")
+    @Resource(name = "orderComposeApiImpl")
     private OrderComposeApi orderComposeApi;
 
     @Resource
@@ -36,6 +36,7 @@ public class AccountController {
 
     /**
      * HTTP接口做测试
+     * http://localhost:8080/transfer/getCurrentLoginAccount.html
      */
     @RequestMapping("/getCurrentLoginAccount")
     @ResponseBody

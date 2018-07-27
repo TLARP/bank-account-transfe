@@ -16,5 +16,5 @@
 
     <dubbo:service interface="com.netease.kaola.compose.TccComposeApi" ref="tccComposeApiBankbImpl"/>
 
-    <dubbo:service interface="com.netease.kaola.compose.TccComposeApi" ref="orderComposeApiImpl"/>
+    <dubbo:service interface="com.netease.kaola.compose.OrderComposeApi" ref="orderComposeApiImpl"/>
 </beans>
