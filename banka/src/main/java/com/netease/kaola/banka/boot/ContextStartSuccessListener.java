@@ -25,7 +25,7 @@ public class ContextStartSuccessListener implements ApplicationListener<Applicat
         g.setFont(new Font("Dialog", Font.PLAIN, 12));
         Graphics2D graphics = (Graphics2D) g;
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        graphics.drawString("HELLO WORLD BANKA", 6, 24);
+        graphics.drawString("HELLO WORLDA", 6, 24);
 
         for (int y = 0; y < 32; y++) {
             StringBuilder sb = new StringBuilder();

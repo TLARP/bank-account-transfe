@@ -48,6 +48,48 @@
     <!--rds Mapper 扫描器-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="rdsSqlSessionFactory"/>
-        <property name="basePackage" value="com.netease.kaola.generic.api"/>
+        <property name="basePackage" value="com.netease.kaola.generic.api.banka"/>
+    </bean>
+
+
+    <!--rds数据库配置-->
+    <bean id="bankbSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${bankb_test_url}"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="5"/>
+        <property name="minIdle" value="5"/>
+        <property name="maxActive" value="50"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <!--用来检测连接是否有效的sql-->
+        <property name="validationQuery" value="select 1"/>
+        <!--申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效-->
+        <property name="testWhileIdle" value="true"/>
+        <!--申请连接时执行validationQuery检测连接是否有效, 默认true:检测,false:不检测-->
+        <property name="testOnBorrow" value="false"/>
+        <!--归还连接时执行validationQuery检测连接是否有效,默认false:不检测,ture:检测-->
+        <property name="testOnReturn" value="false"/>
+        <!-- 打开PSCache(preparedStatement)，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="true"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
+        <!-- 配置监控统计拦截的filters ,需要web.xml中配置-->
+        <property name="filters" value="stat"/>
+    </bean>
+    <!--rds连接器-->
+    <bean id="bankbSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="bankbSource"/>
+        <property name="mapperLocations" value="classpath*:mybatis/mysql/bankb.*.xml"/>
+    </bean>
+    <!--rds Mapper 扫描器-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="bankbSqlSessionFactory"/>
+        <property name="basePackage" value="com.netease.kaola.generic.api.bankb"/>
     </bean>
 </beans>

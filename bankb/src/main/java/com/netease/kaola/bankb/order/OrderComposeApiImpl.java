@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
  */
 @Service("orderComposeApiImpl")
 public class OrderComposeApiImpl implements OrderComposeApi {
+
+
     public String getGorderId() {
         return null;
     }
