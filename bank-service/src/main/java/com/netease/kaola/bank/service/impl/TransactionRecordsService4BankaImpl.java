@@ -1,7 +1,7 @@
 package com.netease.kaola.bank.service.impl;
 
 import com.netease.kaola.bank.service.api.TransactionRecordsService4Banka;
-import com.netease.kaola.generic.api.banka.mapper.TransactionRecordsMapper;
+import com.netease.kaola.generic.api.bank.mapper.TransactionRecordsMapper;
 import com.netease.kaola.generic.api.model.TransactionRecords;
 import org.springframework.stereotype.Service;
 

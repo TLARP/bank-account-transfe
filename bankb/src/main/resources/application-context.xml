@@ -15,5 +15,5 @@
     <!--xml支持导入-->
     <import resource="classpath*:dubbo-provider.xml"/>
 
-    <import resource="classpath*:mybatis.xml"/>
+    <import resource="classpath*:mybatis-banka.xml"/>
 </beans>

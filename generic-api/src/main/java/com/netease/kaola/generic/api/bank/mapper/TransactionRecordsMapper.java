@@ -1,4 +1,4 @@
-package com.netease.kaola.generic.api.banka.mapper;
+package com.netease.kaola.generic.api.bank.mapper;
 
 import com.netease.kaola.generic.api.model.TransactionRecords;
 

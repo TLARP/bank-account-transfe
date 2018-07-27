@@ -15,6 +15,6 @@
     <!--xml支持导入-->
     <import resource="classpath*:dubbo-consumer.xml"/>
 
-    <import resource="classpath*:mybatis.xml"/>
+    <import resource="classpath*:mybatis-banka.xml"/>
     <import resource="spring-converts.xml"/>
 </beans>
