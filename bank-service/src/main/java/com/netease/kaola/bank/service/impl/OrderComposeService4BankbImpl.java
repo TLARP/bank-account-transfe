@@ -19,7 +19,7 @@ public class OrderComposeService4BankbImpl implements OrderComposeService4Bankb 
     @Override
     public String getGorderId() {
         GorderRcords gorderRcords = new GorderRcords();
-        gorderRcords.setUserNmae("默认附加字段没啥用");
+        gorderRcords.setUserName("默认附加字段没啥用");
         gorderGetMapper.insertGorderRcords(gorderRcords);
         return String.valueOf(gorderRcords.getId());
     }
