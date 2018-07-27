@@ -6,10 +6,10 @@ package com.netease.kaola.generic.api.model;
  */
 public enum StatusEnum {
     TRY(0, "初始态"),
-    TRY_SUCCCESS(1, "预确认状态"),
-    CONFIRM(2, "执行状态"),
+    TRY_SUCCCESS(1, "预确认状态,可以认为是触发了Tcc的try操作"),
+    CONFIRM(2, "执行状态可以认为是正在支付"),
     SUCCESS(3, "成功状态"),
-    CANCEL(4, "取消状态");
+    CANCEL(4, "取消状态认为是支付失败");
 
     private Integer status;
 
