@@ -1,15 +1,17 @@
 package com.netease.kaola.banka.controller;
 
-import com.alibaba.dubbo.common.utils.StringUtils;
-import com.google.common.collect.Maps;
-import com.netease.kaola.bank.service.api.TransactionRecordsService4Banka;
+import com.netease.kaola.bank.service.api.AccountAmountService;
+import com.netease.kaola.bank.service.api.TransactionRecordsService;
 import com.netease.kaola.common.MapUtils;
-import com.netease.kaola.compose.OrderComposeApi;
-import com.netease.kaola.compose.TccComposeApi;
+import com.netease.kaola.compose.TccSlaveManagerCompose;
+import com.netease.kaola.generic.api.exception.ConfrimException;
+import com.netease.kaola.generic.api.exception.TryResouceException;
 import com.netease.kaola.generic.api.model.StatusEnum;
 import com.netease.kaola.generic.api.model.TransactionRecords;
-import com.netease.kaola.model.OrderFromVO;
+import com.netease.kaola.model.TransactionRecordsVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,28 +27,15 @@ import java.util.Map;
 @RequestMapping("/transfer")
 @Controller
 public class AccountController {
-    @Resource(name = "orderComposeApiImpl")
-    private OrderComposeApi orderComposeApi;
+    @Resource
+    private TransactionRecordsService transactionRecordsService;
 
     @Resource
-    private TransactionRecordsService4Banka transactionRecordsService;
+    private AccountAmountService accountAmountService;
 
-    @Resource(name = "tccComposeApiBankbImpl")
-    private TccComposeApi tccComposeApi;
+    @Resource
+    private TccSlaveManagerCompose tccSlaveManagerCompose;
 
-    /**
-     * HTTP接口做测试
-     * http://localhost:8080/transfer/getCurrentLoginAccount.html
-     */
-    @RequestMapping("/getCurrentLoginAccount")
-    @ResponseBody
-    public Map<String, Object> getCurrentLoginAccount() {
-        Map<String, Object> map = Maps.newHashMap();
-        map.put("retCode", 200);
-        map.put("data", "q_test1@163.com");
-        map.put("response", tccComposeApi.getTryMessage(new OrderFromVO()));
-        return map;
-    }
 
     /**
      * 1)账户都是从cookie取
@@ -56,52 +45,77 @@ public class AccountController {
      */
     @RequestMapping("/getGorderId")
     @ResponseBody
-    public Map<String, Object> getGorderId(String accountId) {
-        if (StringUtils.isBlank(accountId)) {
-            return MapUtils.mapWithError("账户未登录");
-        }
-        //转账金额大小等校验
-        String gorderId;
-        try {
-            gorderId = orderComposeApi.getGorderId();
-        } catch (Exception e) {
-            return MapUtils.mapWithError("获取订单号失败!");
-        }
-        //这里应该不可能为null
-        if (gorderId == null) {
-            System.out.println("need send warning message! may be has bug!");
-            return MapUtils.mapWithError("系统故障");
-        }
-        return MapUtils.mapWithSuccess(gorderId);
+    public Map<String, Object> getGorderId(String accountIdIn, String accountIdOut, BigDecimal amount) {
+        TransactionRecords transactionRecords = new TransactionRecords();
+        transactionRecords.setAccountIdIn(accountIdIn);
+        transactionRecords.setAccountIdOut(accountIdOut);
+        transactionRecords.setDeductionAmount(amount);
+        transactionRecords.setTimestamp(new Timestamp(System.currentTimeMillis()));
+        transactionRecords.setStatas(StatusEnum.TRY.getStatus());
+        transactionRecordsService.insertTransactionRecords(transactionRecords);
+        return MapUtils.mapWithSuccess(transactionRecords.getId());
     }
 
     /**
-     * @param accountIdOut 当前转出账户
-     * @param amount       总金额
-     * @param gorderId     订单号
-     * @param accountIn    转入账户
+     * @param gorderId 订单号
+     *                 <p>
+     *                 这里加入就是转账操作，实际上支持邀请别人支付的场景也是可以做的
      */
     @RequestMapping("/transferMoney")
     @ResponseBody
-    public Map<String, Object> transferMoney(String accountIdOut, BigDecimal amount, String gorderId, String accountIn) {
-        Timestamp serverTime = new Timestamp(System.currentTimeMillis());
-        if (StringUtils.isBlank(accountIdOut) || amount == null || StringUtils.isBlank(gorderId)) {
-            return MapUtils.mapWithError("请求参数有误!");
+    @Transactional
+    public Map<String, Object> transferMoney(Long gorderId) {
+        //TODO 订单号这里可以使用对称加密，否则有穿库的风险
+        TransactionRecords transactionRecords = transactionRecordsService.getTransactionRecordsByGorderId(gorderId);
+        if (transactionRecords == null) {
+            return MapUtils.mapWithError("无效订单号，是否有攻击风险!");
         }
-        //插入用户订单表记录
-        TransactionRecords transactionRecords = new TransactionRecords();
-        transactionRecords.setAccountIdOut(accountIdOut);
-        transactionRecords.setAccountIdIn(accountIn);
-        transactionRecords.setDeductionAmount(amount);
-        //设置为初始状态
-        transactionRecords.setStatas(StatusEnum.TRY.getStatus());
-        transactionRecords.setTimestamp(serverTime);
-        transactionRecords.setGorderId(gorderId);
+        //如果是非初始状态说明有任务在执行操作，这里直接忽略操作
+        // TODO 这里对于单个用户的多次请求可以获取锁，普通账户的转账请求不影响客户体验
+        if (!StatusEnum.TRY.getStatus().equals(transactionRecords.getStatas())) {
+            return MapUtils.mapWithError("此次操作直接无效了!是不是有攻击风险！");
+        }
+
+        Integer num = accountAmountService.updateAccountAmountRecordsPrepare(transactionRecords);
+        if (num == 0) {
+            return MapUtils.mapWithError("锁定资源失败，现在可能不够转账了");
+        }
+        transactionRecords.setStatas(StatusEnum.TRY_SUCCCESS.getStatus());
+        //这里如果触发数据库异常信息也会由于事务回滚，数据保持一致
+        num = transactionRecordsService.updateTransactionRecords(transactionRecords);
+        if (num == 0) {
+            //事务回滚，不会导致数据不一致
+            throw new TryResouceException();
+        }
+        //调用第三方的资源准备资源
+        TransactionRecordsVO transactionRecordsVO = new TransactionRecordsVO();
+        BeanUtils.copyProperties(transactionRecords, transactionRecordsVO);
+        //这里如果第三方出现了异常
         try {
-            transactionRecordsService.insertTransactionRecords(transactionRecords);
+            tccSlaveManagerCompose.preGetAccountResouce(transactionRecordsVO);
         } catch (Exception e) {
-            return MapUtils.mapWithError("用户已经在转账忽略此次转账，或者是数据库连接有问题触发了异常，此次交易终止，如果是连接等问题，哨兵应该有报警！");
+            //fixme 这里为了减少复杂性我建议直接让从事务处理加一个默认超时机制
+            tccSlaveManagerCompose.rollBackAccountResource(transactionRecordsVO);
+            throw e;
         }
-        return MapUtils.mapWithSuccess("success!");
+        //如果都准备成功，接下来直接进入确认状态,这里我感觉是不是
+        num = accountAmountService.updateAccountAmountRecordsPrepareToConfirm(transactionRecords);
+        if (num == 0) {
+            throw new ConfrimException();
+        }
+        transactionRecords.setStatas(StatusEnum.CONFIRM.getStatus());
+        num = transactionRecordsService.updateTransactionRecords(transactionRecords);
+        if (num == 0) {
+            throw new ConfrimException();
+        }
+        //从事务处理中心的状态修改为确认状态
+        try {
+            tccSlaveManagerCompose.updateAccountAmountRecordsPrepareToConfirm(transactionRecordsVO);
+        } catch (Exception e) {
+            //如果出现了异常我们就直接回滚，并通过异步任务去回调
+            //TODO 但是这里可能有点问题
+            throw new ConfrimException();
+        }
+        return MapUtils.mapWithSuccess("转账成功!");
     }
 }

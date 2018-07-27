@@ -14,7 +14,14 @@ public interface AccountAmountMapper {
      *
      * @param accountAmountRecords 记录信息
      */
-    AccountAmountRecords selectAccountAmount(AccountAmountRecords accountAmountRecords);
+    AccountAmountRecords selectAccountAmountByAccountId(AccountAmountRecords accountAmountRecords);
+
+    /**
+     * 更新状态
+     *
+     * @param accountAmountRecords 用户事务记录
+     */
+    Integer updateAccountAmountRecordsPrepare(AccountAmountRecords accountAmountRecords);
 
     /**
      * 按交易金额暂时更新用户扣减余额

@@ -1,4 +1,4 @@
-package com.netease.kaola.generic.api.model;
+package com.netease.kaola.model;
 
 import lombok.Data;
 
@@ -11,8 +11,9 @@ import java.sql.Timestamp;
  * on 2018/7/27.
  */
 @Data
-public class TransactionRecords implements Serializable {
-    private static final long serialVersionUID = -2286368382231381434L;
+public class TransactionRecordsVO implements Serializable {
+    private static final long serialVersionUID = -4009928345190261751L;
+
     //订单号
     private Long id;
 
@@ -29,7 +30,7 @@ public class TransactionRecords implements Serializable {
     private Timestamp timestamp;
 
     /**
-     *  @link com.netease.kaola.generic.api.model.StatusEnum}
+     * @link com.netease.kaola.generic.api.model.StatusEnum}
      */
     private Integer statas;
 }

@@ -21,4 +21,11 @@ public interface TransactionRecordsMapper {
      * @param transactionRecords 用户交易记录
      */
     Integer updateTransactionRecords(TransactionRecords transactionRecords);
+
+    /**
+     * 根据订单号获取订单信息
+     *
+     * @param id 订单号
+     */
+    TransactionRecords getTransactionRecordsByGorderId(Long id);
 }
