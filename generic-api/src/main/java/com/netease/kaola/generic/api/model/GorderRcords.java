@@ -15,5 +15,5 @@ public class GorderRcords implements Serializable {
 
     private Long id;
 
-    private Timestamp dbCreateTime;
+    private String userNmae;
 }

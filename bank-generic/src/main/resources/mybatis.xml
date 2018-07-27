@@ -85,7 +85,7 @@
     <!--rds连接器-->
     <bean id="bankbSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="bankbSource"/>
-        <property name="mapperLocations" value="classpath*:mybatis/mysql/bankb.*.xml"/>
+        <property name="mapperLocations" value="classpath*:mybatis/mysql/bankb/*.xml"/>
     </bean>
     <!--rds Mapper 扫描器-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

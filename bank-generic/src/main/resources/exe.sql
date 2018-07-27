@@ -1,5 +1,6 @@
-create table gorder_id(
-id bigint(20) not null comment '主键',
-db_create_time timestamp not null comment '创建时间',
-PRIMARY  key(id)
-)
+#订单id产生记录表
+CREATE TABLE   g_order
+(
+id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+username VARCHAR(15) NOT NULL
+) AUTO_INCREMENT = 1;
