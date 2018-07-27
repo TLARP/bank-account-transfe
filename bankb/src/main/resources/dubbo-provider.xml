@@ -14,7 +14,6 @@
 
     <dubbo:provider port="10001"/>
 
-    <dubbo:service interface="com.netease.kaola.compose.TccComposeApi" ref="tccComposeApiBankbImpl"/>
+    <dubbo:service interface="com.netease.kaola.compose.TccSlaveManagerCompose" ref="tccSlaveManagerCompose"/>
 
-    <dubbo:service interface="com.netease.kaola.compose.OrderComposeApi" ref="orderComposeApiImpl"/>
 </beans>
