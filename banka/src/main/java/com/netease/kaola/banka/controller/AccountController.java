@@ -95,10 +95,11 @@ public class AccountController {
             tccSlaveManagerCompose.preGetAccountResouce(transactionRecordsVO);
         } catch (Exception e) {
             //fixme 这里为了减少复杂性我建议直接让从事务处理加一个默认超时机制
+            //或者重试
             tccSlaveManagerCompose.rollBackAccountResource(transactionRecordsVO);
             throw e;
         }
-        //如果都准备成功，接下来直接进入确认状态,这里我感觉是不是
+        //如果都准备成功，接下来直接进入确认状态
         num = accountAmountService.updateAccountAmountRecordsPrepareToConfirm(transactionRecords);
         if (num == 0) {
             throw new ConfrimException();
