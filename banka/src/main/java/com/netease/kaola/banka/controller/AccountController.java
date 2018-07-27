@@ -113,7 +113,9 @@ public class AccountController {
             tccSlaveManagerCompose.updateAccountAmountRecordsPrepareToConfirm(transactionRecordsVO);
         } catch (Exception e) {
             //如果出现了异常我们就直接回滚，并通过异步任务去回调
-            //TODO 但是这里可能有点问题
+            //TODO 但是这里可能有点问题，由于数据库的状态回到了最初状态请求可以继续，但是业务方有在执行回滚操作
+            //TODO  ，因此就可能要我们选择如何处理这种场景是考虑用户体验直接废弃这次操作，还是说接下来用户可以继续付款，
+            //TODO  如果可以用该订单号付款，那么回滚什么时间成功可能使我们又要解决的问题
             throw new ConfrimException();
         }
         return MapUtils.mapWithSuccess("转账成功!");
