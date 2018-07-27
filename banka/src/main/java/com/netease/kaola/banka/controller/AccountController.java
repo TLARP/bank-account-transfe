@@ -5,8 +5,10 @@ import com.google.common.collect.Maps;
 import com.netease.kaola.bank.service.api.TransactionRecordsService4Banka;
 import com.netease.kaola.common.MapUtils;
 import com.netease.kaola.compose.OrderComposeApi;
+import com.netease.kaola.compose.TccComposeApi;
 import com.netease.kaola.generic.api.model.StatusEnum;
 import com.netease.kaola.generic.api.model.TransactionRecords;
+import com.netease.kaola.model.OrderFromVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,11 +25,14 @@ import java.util.Map;
 @RequestMapping("/transfer")
 @Controller
 public class AccountController {
-    @Resource
+    @Resource(name = "tccComposeApiBankbImpl")
     private OrderComposeApi orderComposeApi;
 
     @Resource
     private TransactionRecordsService4Banka transactionRecordsService;
+
+    @Resource(name = "tccComposeApiBankbImpl")
+    private TccComposeApi tccComposeApi;
 
     /**
      * HTTP接口做测试
@@ -38,6 +43,7 @@ public class AccountController {
         Map<String, Object> map = Maps.newHashMap();
         map.put("retCode", 200);
         map.put("data", "q_test1@163.com");
+        map.put("response", tccComposeApi.getTryMessage(new OrderFromVO()));
         return map;
     }
 
