@@ -48,6 +48,6 @@
     <!--rds Mapper 扫描器-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="rdsSqlSessionFactory"/>
-        <property name="basePackage" value="com.netease.kaola.generic.provider.mapper.mysql"/>
+        <property name="basePackage" value="com.netease.kaola.generic.api"/>
     </bean>
 </beans>

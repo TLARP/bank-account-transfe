@@ -9,7 +9,7 @@
 
     <dubbo:application name="bankb"/>
 
-    <dubbo:provider port="10000" export="10001"/>
+    <dubbo:provider port="10001"/>
 
     <dubbo:service interface="com.netease.kaola.compose.TccComposeApi" ref="tccComposeApiBankbImpl"/>
 
