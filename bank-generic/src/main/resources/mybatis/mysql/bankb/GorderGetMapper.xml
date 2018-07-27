@@ -9,10 +9,10 @@
     <sql id="baseColumn">id,username</sql>
     <insert id="insertGorderRcords" keyProperty="id" useGeneratedKeys="true">
         insert into g_order
-        (<include refid="base"/>)
+        (<include refid="baseColumn"/>)
         VALUES
         (
-        seq,
+        id,
         #{userName}
         )
     </insert>
