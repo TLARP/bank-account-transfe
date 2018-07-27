@@ -7,6 +7,5 @@
         http://code.alibabatech.com/schema/dubbo
         http://dubbok.hz.netease.com/dubbo.xsd">
 
-    <dubbo:application name="banka"/>
 
 </beans>

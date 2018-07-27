@@ -14,7 +14,6 @@
     <context:component-scan base-package="com.netease.kaola"/>
     <!--xml支持导入-->
     <import resource="classpath*:dubbo-consumer.xml"/>
-    <import resource="classpath*:dubbo-provider.xml"/>
 
     <import resource="classpath*:mybatis.xml"/>
     <import resource="spring-converts.xml"/>
