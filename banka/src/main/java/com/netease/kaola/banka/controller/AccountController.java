@@ -73,7 +73,7 @@ public class AccountController {
         //如果是非初始状态说明有任务在执行操作，这里直接忽略操作
         // TODO 这里对于单个用户的多次请求可以获取锁，普通账户的转账请求不影响客户体验
         if (!StatusEnum.TRY.getStatus().equals(transactionRecords.getStatas())) {
-            return MapUtils.mapWithError("此次操作直接无效了!是不是有攻击风险！");
+            return MapUtils.mapWithError("此次操作直接无效了!是不是有攻击风险!");
         }
 
         Integer num = accountAmountService.updateAccountAmountRecordsPrepare(transactionRecords);
