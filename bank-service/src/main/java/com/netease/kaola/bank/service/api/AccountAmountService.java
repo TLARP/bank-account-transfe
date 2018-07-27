@@ -22,5 +22,8 @@ public interface AccountAmountService {
      */
     Integer updateAccountAmountRecordsPrepareToConfirm(TransactionRecords transactionRecords);
 
-
+    /**
+     * 从确认状态改为取消状态
+     */
+    Integer updateAccountAmountRecordsPrepareToCancel(TransactionRecords transactionRecords);
 }
