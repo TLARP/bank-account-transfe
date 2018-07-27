@@ -9,6 +9,9 @@
 
     <dubbo:application name="bankb"/>
 
+    <dubbo:registry address="multicast://224.5.6.7:1234" />
+
+
     <dubbo:provider port="10001"/>
 
     <dubbo:service interface="com.netease.kaola.compose.TccComposeApi" ref="tccComposeApiBankbImpl"/>
